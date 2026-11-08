@@ -1,6 +1,6 @@
 ---
 name: vibe-develop
-description: PLAN.md의 다음 단계 하나를 구현해 ego-browser로 눌러 보고 확인하고, 오류 원문을 받으면 원인부터 진단해 고치고, 배포 전 세 가지를 점검한 뒤 Vercel에 한 번 배포하고 공개 주소를 ego-browser로 확인한다. 사용자가 vibe-develop 스킬을 부를 때만 쓴다.
+description: PLAN.md의 다음 단계 하나를 구현해 ego-browser로 눌러 보고 확인하고, 오류 원문을 받으면 원인부터 진단해 고치고, 배포 전 세 가지를 점검한 뒤 .env.local 의 Vercel 토큰으로 한 번 배포하고 공개 주소를 ego-browser로 확인한다. 사용자가 vibe-develop 스킬을 부를 때만 쓴다.
 ---
 
 사용자가 준 것을 보고 아래 다섯 중 **하나만** 한다. 무엇을 할지 한 줄로 먼저 말한다.
@@ -69,12 +69,14 @@ description: PLAN.md의 다음 단계 하나를 구현해 ego-browser로 눌러 
 
 ## E. 배포 — 이름을 정해 한 번만
 
-배포 전 점검(C)을 통과하지 않았으면 C부터 한다. Vercel CLI는 `vercel.cmd` 로 부른다.
+배포 전 점검(C)을 통과하지 않았으면 C부터 한다. Vercel 명령은 모두 `node scripts/vercel.mjs …` 로 부른다 — `.env.local` 의 `VERCEL_TOKEN` 을 값 없이 넘겨 준다. 토큰 · 키 값을 읽어 말하거나 명령에 쓰지 않는다.
 
-1. 로그인: `vercel.cmd whoami` 로 본다. 로그인이 안 되어 있으면 사용자에게 별도 PowerShell 창에서 `vercel.cmd login` 을 하게 하고 기다린다 — 로그인은 사람이 한다.
-2. 이름: 사용자가 준 이름을 쓴다. 없으면 `kca<주제 번호>-<영문 이름>` (예: `kca02-hong`)으로 묻는다. 소문자 · 숫자 · `-` 만 쓴다.
-3. 연결: `vercel.cmd project create <이름>` (이미 있으면 넘어간다) → `vercel.cmd link --yes --project <이름>`. 명령 이름이 다르다고 나오면 `vercel.cmd project --help` 로 만드는 명령을 확인한다.
-4. 키: 사용자에게 **별도 PowerShell 창**에서 이 폴더로 가서 `vercel.cmd env add DATA_GO_KR_KEY production` 을 실행해 Decoding 키를 붙여 넣게 한다. 넣었다고 할 때까지 기다린다. 키 값을 묻거나 출력하지 않는다.
-5. 배포는 한 번: `vercel.cmd deploy --prod --yes`
-6. 확인: 출력의 공개 주소(`https://<이름>.vercel.app`)를 `ego-browser` 로 열어 PLAN 1 · 2단계 완료 기준을 "브라우저 점검"대로 보고, "예시 데이터" 표시 없이 실제 데이터가 보이는지 본다. 표로 보고하고 사용자에게 휴대폰으로도 열어 보라고 말한다.
-7. "예시 데이터"로 보이면: `vercel.cmd env ls` 로 `DATA_GO_KR_KEY` 이름이 production에 있는지만 본다 → 키를 넣기 전에 배포했으면 `vercel.cmd deploy --prod --yes` 를 한 번 더 한다.
+1. 토큰: `.env.local` 에 `VERCEL_TOKEN` 줄이 있는지만 본다. 없으면 사용자에게 안내하고 기다린다 — vercel.com 에 GitHub로 가입 · 로그인 → Account Settings → **Tokens** → 이름 `kca-교육` · 만료 1일로 만들고 → 메모장으로 `.env.local` 에 `VERCEL_TOKEN=토큰` 한 줄. 토큰 화면은 사람이 연다.
+2. 확인: `node scripts/vercel.mjs whoami` 에 계정 이름이 나오면 된다. "not valid" 면 토큰을 다시 만들어 넣게 한다.
+3. 이름: 사용자가 준 이름을 쓴다. 없으면 `kca<주제 번호>-<영문 이름>` (예: `kca02-hong`)으로 묻는다. 소문자 · 숫자 · `-` 만 쓴다.
+4. 연결: `node scripts/vercel.mjs project create <이름>` (이미 있으면 넘어간다) → `node scripts/vercel.mjs link --yes --project <이름>`. 명령 이름이 다르다고 나오면 `node scripts/vercel.mjs project --help` 로 만드는 명령을 확인한다.
+5. 키 등록: `node scripts/vercel.mjs env-add DATA_GO_KR_KEY` — `.env.local` 의 값을 production 환경변수로 넣는다.
+6. 배포는 한 번: `node scripts/vercel.mjs deploy --prod --yes`
+7. 확인: 출력의 공개 주소(`https://<이름>.vercel.app`)를 `ego-browser` 로 열어 PLAN 1 · 2단계 완료 기준을 "브라우저 점검"대로 보고, "예시 데이터" 표시 없이 실제 데이터가 보이는지 본다. 표로 보고하고 사용자에게 휴대폰으로도 열어 보라고 말한다.
+8. "예시 데이터"로 보이면: `node scripts/vercel.mjs env ls` 로 `DATA_GO_KR_KEY` 이름이 production에 있는지만 본다 → 키 등록 전에 배포했으면 6을 한 번 더 한다.
+9. 끝으로 말한다: "교육이 끝나면 vercel.com → Tokens 에서 `kca-교육` 토큰을 지우세요."

@@ -19,6 +19,7 @@
 ## 3. 키와 오류
 
 - 공공데이터 키는 `.env.local` 의 `DATA_GO_KR_KEY` (Decoding 키)다. 서버 라우트 안에서만 `process.env.DATA_GO_KR_KEY` 로 읽고, `NEXT_PUBLIC_` 을 붙이지 않는다.
+- Vercel 토큰은 `.env.local` 의 `VERCEL_TOKEN` 이다. 배포 명령(`node scripts/vercel.mjs …`)만 쓰고, 앱 코드에서 읽지 않는다. `.vercelignore` 가 `.env*` 를 배포에서 뺀다.
 - 키가 없거나 호출이 실패해도 화면은 돈다. 라우트는 `data/snapshot.json` 을 대신 돌려주고, 화면에 "예시 데이터"라고 표시한다. 오류 원문 · 키 · 요청 주소는 화면에 보내지 않는다 (서버 로그에만 남긴다).
 - 요청 파라미터는 `URLSearchParams` 로 조립한다 (키 · 한글 · 대괄호가 안전하게 인코딩된다).
 

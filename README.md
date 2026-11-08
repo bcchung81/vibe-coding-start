@@ -14,7 +14,7 @@
 | 명령 | 함께 쓰는 것 |
 |---|---|
 | `vibe-plan` | `scripts/api-test.mjs`(API 5건 시험) · think → sequential-thinking MCP |
-| `vibe-develop` | ego-browser(눌러 보고 확인 · 공개 주소 확인) · think → sequential-thinking MCP · Vercel CLI |
+| `vibe-develop` | ego-browser(눌러 보고 확인 · 공개 주소 확인) · think → sequential-thinking MCP · Vercel CLI(`scripts/vercel.mjs` — `.env.local` 의 `VERCEL_TOKEN`) |
 | `vibe-design` | impeccable · ego-browser(완료 기준 · 휴대폰 너비) |
 | `deck-plan` | kordoc MCP(hwpx 읽기) · think → sequential-thinking MCP |
 | `deck-build` | ego-browser · impeccable · aimotion(기술만 옮김) |
