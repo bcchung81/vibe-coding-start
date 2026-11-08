@@ -4,7 +4,7 @@
 
 | 폴더 | 복사되는 곳 | 쓰는 날 | 들어 있는 것 |
 |---|---|---|---|
-| `vibe/` | `C:\workspace\vibe` | 1일차 — 기관 업무 웹앱 | 규칙 · 명령 3개(`vibe-plan` · `vibe-develop` · `vibe-design`) · 주제 카드 3개 · API 시험 스크립트 · Next.js 뼈대 |
+| `vibe/` | `C:\workspace\vibe` | 1일차 — 기관 업무 웹앱 | 규칙 · 명령 3개(`vibe-plan` · `vibe-develop` · `vibe-design`) · 주제 카드 8개 · API 시험 스크립트 · Next.js 뼈대 |
 | `deck/` | `C:\workspace\deck` | 2일차 — 3D 발표 덱 · 영상 | 규칙 · 명령 3개(`deck-plan` · `deck-build` · `deck-export`) · 예시 덱 6장 · 3D 장면 3개 · 영상 내보내기 |
 
 시작은 각 폴더의 `시작하기.md` 를 본다.

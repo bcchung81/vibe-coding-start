@@ -20,7 +20,8 @@ description: 주제 카드의 API를 5건만 불러 api-test.md로 남기고(API
    | 카드 | 명령 |
    |---|---|
    | 02 | `node scripts/api-test.mjs https://apis.data.go.kr/B552729/kcaApiService_cq1/getCqNotice body.items.list pageNo=1 numOfRows=5` |
-   | 01 · 03 (자동변환 오픈API) | `node scripts/api-test.mjs <카드의 요청 주소> data page=1 perPage=5` |
+   | 07 | `node scripts/api-test.mjs https://apis.data.go.kr/B552729/kcaApiService_emf/getEmfExposureIndex response.body.items.list "address=서울특별시 중구 세종대로 110" distance=0.1` |
+   | 01 · 03 · 04 · 05 · 06 · 08 (자동변환 오픈API) | `node scripts/api-test.mjs <카드의 요청 주소> data page=1 perPage=5` |
 
 4. 스크립트가 `api-test.md` 에 요청 · 받은 줄 수 · 항목별 형식 · 5건 표를 쓴다. 맨 위 제목 아래에 `- 주제: <번호>` 줄을 넣는다(B의 1번이 읽는다). 실패하면 나온 메시지(키는 가려져 있다)로 카드의 "막히는 곳"부터 본다.
    - HTTP 403 · "등록되지 않은 서비스키": 먼저 이 주제 번호의 API를 활용신청했는지 묻는다(신청은 API마다 따로다).
