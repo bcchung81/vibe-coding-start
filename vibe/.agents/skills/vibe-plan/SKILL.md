@@ -72,4 +72,4 @@ description: 주제 카드의 API를 5건만 불러 api-test.md로 남기고(API
 
 ### 끝나면
 
-`PRD.md` 요약 3줄과 단계 목록을 보여 주고 "다음: 새 창에서 `npm.cmd run dev` → `vibe-develop 스킬로 다음 단계 해줘`"를 말한다.
+`PRD.md` 요약 3줄과 단계 목록을 보여 주고 "다음: Orca 새 터미널에서 `npm.cmd run dev` → `vibe-develop 스킬로 다음 단계 해줘`"를 말한다.

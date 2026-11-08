@@ -32,7 +32,7 @@
 
 1. `npm.cmd install`
 2. `npm.cmd run build` 로 덱이 빌드되는지 확인한다
-3. 3줄로 보고하고, 새 PowerShell 창에서 `npm.cmd run dev` 를 켜고 http://localhost:5173 을 열라고 안내한다. 다음은 `deck-plan 스킬로 C:\workspace\report\최종.md 를 6장 발표 줄거리로 만들어줘`
+3. 3줄로 보고하고, Orca 새 터미널에서 `npm.cmd run dev` 를 켜고 http://localhost:5173 을 열라고 안내한다. 다음은 `deck-plan 스킬로 C:\workspace\report\최종.md 를 6장 발표 줄거리로 만들어줘`
 
 ## 5. 확인
 

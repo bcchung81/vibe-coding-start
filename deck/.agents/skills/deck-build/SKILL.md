@@ -44,6 +44,6 @@ description: deck-plan.md대로 index.html의 장을 만들고 3D 장면(globe �
 ## 5. 확인 — 장마다
 
 1. `npm.cmd run build` 가 통과하는지 본다.
-2. 개발 서버(http://localhost:5173)가 켜져 있어야 한다. 꺼져 있으면 사용자에게 새 창에서 `npm.cmd run dev` 를 켜 달라고 한다.
+2. 개발 서버(http://localhost:5173)가 켜져 있어야 한다. 꺼져 있으면 사용자에게 Orca 새 터미널에서 `npm.cmd run dev` 를 켜 달라고 한다.
 3. `ego-browser` 스킬로 http://localhost:5173/#장번호 를 열어 3초 기다린 뒤 본다: 글자가 넘치거나 겹치지 않나 · 3D가 글을 가리지 않나 · 숫자가 맞나. 고친 장만 연다.
 4. 결과를 한 줄로 보고하고, 사용자에게 내 브라우저에서도 그 장을 보라고 말한다.
