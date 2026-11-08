@@ -1,5 +1,5 @@
 // 덱을 영상으로 — 녹화가 아니라 t를 1/30초씩 넣어 한 장씩 찍고(Edge) FFmpeg로 묶는다. 느린 PC도 영상은 매끈하다.
-// 실행: npm.cmd run export -- --slides 1,3,6 --sec 10   (장 번호 · 장마다 초. 빼면 모든 장 · 장의 data-sec)
+// 실행: node scripts/export.mjs --slides '1,3,6' --sec 10   (장 번호 · 장마다 초. 빼면 모든 장 · 장의 data-sec)
 //       --gif 메신저용 GIF도 · --hd 1920×1080 (기본 1280×720) · --light 가벼운 모드로
 import { spawn, spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, statSync } from "node:fs";

@@ -1,4 +1,4 @@
-// 조절 패널의 처음 값 — 영상(npm.cmd run export)도 이 값으로 찍는다.
+// 조절 패널의 처음 값 — 영상(node scripts/export.mjs)도 이 값으로 찍는다.
 // 패널에서 값을 맞춘 뒤 '값 복사'를 눌러 AI에게 붙여 넣으면 이 파일을 바꿔 준다.
 export const params = {
   color: "#4f9cff", // 3D 물체 색

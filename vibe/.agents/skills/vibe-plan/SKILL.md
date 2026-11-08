@@ -13,7 +13,8 @@ description: 주제 카드의 API를 5건만 불러 api-test.md로 남기고(API
 ## A. API 시험 — 5건만 불러 실제로 오는 데이터 보기
 
 1. 주제 번호로 `topics/` 의 카드를 찾는다. 번호가 없으면 `topics/` 의 번호 · 제목을 보여 주고 고르게 한다.
-2. 키: `.env.local` 에 `DATA_GO_KR_KEY` 줄이 있는지만 본다. 값을 읽어 말하거나 출력하지 않는다. 없으면 `시작하기.md` 3번대로 사용자가 직접 넣게 안내하고 기다린다.
+2. 키: 값을 보지 않고 있는지만 본다 — `Select-String -Path .env.local -Pattern '^\s*DATA_GO_KR_KEY\s*=\s*\S' -Quiet` (True/False만 나온다). `.env.local` 을 열거나(`Get-Content` 등) 내용을 출력하지 않는다.
+   - False · 파일 없음 · 승인 전이면 기다리지 않는다. `시작하기.md` 3번대로 나중에 넣으라고 안내하고 **예시 데이터로 진행**한다: `data/<번호>.json` 의 앞 5건으로 아래 4번과 같은 모양의 `api-test.md` 를 쓰고, 맨 위에 "예시 데이터 — 키가 반영되면 다시 시험" 을 적는다. 3번은 건너뛰고 5번으로 간다.
 3. 카드의 "API 요청"에서 요청 주소, "응답에서 쓸 항목"에서 목록 경로를 읽어 5건만 부른다. 키는 스크립트가 `.env.local` 에서 직접 읽어 `serviceKey` 로 붙인다 — 명령에 키를 쓰지 않는다.
 
    | 카드 | 명령 |
@@ -21,7 +22,9 @@ description: 주제 카드의 API를 5건만 불러 api-test.md로 남기고(API
    | 02 | `node scripts/api-test.mjs https://apis.data.go.kr/B552729/kcaApiService_cq1/getCqNotice body.items.list pageNo=1 numOfRows=5` |
    | 01 · 03 (자동변환 오픈API) | `node scripts/api-test.mjs <카드의 요청 주소> data page=1 perPage=5` |
 
-4. 스크립트가 `api-test.md` 에 요청 · 받은 줄 수 · 항목별 형식 · 5건 표를 쓴다. 실패하면 나온 메시지(키는 가려져 있다)로 카드의 "막히는 곳"부터 본다. 키 오류(`SERVICE_KEY_IS_NOT_REGISTERED_ERROR` · 등록되지 않은 인증키)는 Encoding 키를 넣었거나 아직 반영 전인 경우가 많다 — 사용자에게 그렇게 알리고, 키를 고치는 일은 사용자가 한다.
+4. 스크립트가 `api-test.md` 에 요청 · 받은 줄 수 · 항목별 형식 · 5건 표를 쓴다. 맨 위 제목 아래에 `- 주제: <번호>` 줄을 넣는다(B의 1번이 읽는다). 실패하면 나온 메시지(키는 가려져 있다)로 카드의 "막히는 곳"부터 본다.
+   - HTTP 403 · "등록되지 않은 서비스키": 먼저 이 주제 번호의 API를 활용신청했는지 묻는다(신청은 API마다 따로다).
+   - 키 오류(`SERVICE_KEY_IS_NOT_REGISTERED_ERROR` · 등록되지 않은 인증키): Encoding 키를 넣었거나 아직 반영 전인 경우가 많다 — 사용자에게 그렇게 알리고, 키를 고치는 일은 사용자가 한다. 기다리지 말고 2번의 예시 데이터로 진행한다.
 5. `api-test.md` 맨 아래 "설명서와 다른 점" 표를 채운다. 카드와 `api-notes.md`(있으면)의 설명을 실제로 온 값과 항목별로 비교해, **다른 것만** 적는다.
 
    | 항목 | 설명서 | 실제로 온 것 |
@@ -34,12 +37,12 @@ description: 주제 카드의 API를 5건만 불러 api-test.md로 남기고(API
 
 ### PRD.md
 
-1. 주제: `api-test.md` 의 주제를 쓴다. 없으면 번호를 묻는다.
+1. 주제: `api-test.md` 의 `주제:` 줄을 쓴다. 없으면 번호를 묻는다.
    - 예시 데이터: `data/<번호>.json` 이 있으면 `data/snapshot.json` 으로 복사한다. `data/snapshot.json` 에 이미 `items` 가 있으면 덮기 전에 묻는다.
 2. 카드 · `api-notes.md` · `api-test.md` 를 읽는다. 화면에 쓸 항목과 형식은 **실제로 온 것**을 따른다.
 3. `PRD.md` 가 이미 있으면 이 절을 건너뛰고 PLAN.md 로 간다. 사용자가 다시 쓰라고 할 때만 새로 쓴다.
 4. 만들 화면에 대해 질문을 **5개 이하로 하나씩** 묻는다. 예: 누가 언제 쓰나 · 첫 화면에 꼭 보일 것 · 고르는 조건(지역 · 검색어 등) · 보여 주는 방식(카드 · 표) · 빼도 되는 것.
-5. 사용자가 범위를 못 정하면 `think` 스킬(sequential-thinking MCP — `setup.ps1` 이 전역에 설치)로 "이 카드로 오늘 70분 안에 만들 수 있는 화면 범위"를 단계별로 따져 제안한다. `think` 가 없으면 같은 질문을 직접 따진다.
+5. 사용자가 범위를 못 정하면 `think` 스킬(sequential-thinking MCP — `setup.ps1` 이 전역에 설치)로 "이 카드로 오늘 3교시 90분 안에 만들 수 있는 화면 범위"를 단계별로 따져 제안한다. `think` 가 없으면 같은 질문을 직접 따진다.
 6. 답을 모아 `PRD.md` 를 쓴다.
 
 | 칸 | 내용 |
@@ -57,7 +60,7 @@ description: 주제 카드의 API를 5건만 불러 api-test.md로 남기고(API
 
    | 단계 | 할 일 | 완료 기준 예 |
    |---|---|---|
-   | 1 연결 | 서버 라우트 `/api/data` 가 실제 API를 부르고(키는 `.env.local` 의 `DATA_GO_KR_KEY`), 키가 없거나 실패하면 `data/snapshot.json` 을 `live: false` 로 돌려준다 | 키가 없으면 "예시 데이터"가 보인다 |
+   | 1 연결 | 서버 라우트 `/api/data` 가 실제 API를 부르고(키는 `.env.local` 의 `DATA_GO_KR_KEY`), 키가 없거나 실패하면 `data/snapshot.json` 을 `live: false` 로 돌려준다 | 실제 공지 5건이 보인다 (키가 없으면 "예시 데이터" 표시) |
    | 2 화면 | 받은 항목을 화면 자리에 넣는다 | 공지 제목과 등록일이 최신순으로 보인다 |
    | 3 디자인 | `vibe-design` 으로 다듬는다 | 휴대폰 너비에서도 읽힌다 |
    | 4 · 5 기능 | PRD의 기능 하나씩 | 검색어를 넣으면 맞는 공지만 남는다 |

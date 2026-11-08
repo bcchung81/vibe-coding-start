@@ -32,13 +32,14 @@
 
 1. `npm.cmd install`
 2. `npm.cmd run build` 로 덱이 빌드되는지 확인한다
-3. 3줄로 보고하고, 새 PowerShell 창에서 `npm.cmd run dev` 를 켜고 http://localhost:5173 을 열라고 안내한다. 다음은 `deck-build 스킬로 표지 3D 장면 색을 기관 색으로 바꿔줘`
+3. 3줄로 보고하고, 새 PowerShell 창에서 `npm.cmd run dev` 를 켜고 http://localhost:5173 을 열라고 안내한다. 다음은 `deck-plan 스킬로 C:\workspace\report\최종.md 를 6장 발표 줄거리로 만들어줘`
 
 ## 5. 확인
 
 - 장을 고친 뒤 `npm.cmd run build` 가 통과하는지 본다.
 - `ego-browser` 스킬로 http://localhost:5173/#장번호 를 열어 글자 넘침 · 겹침을 본다. 화면을 읽는 것도 사용량을 쓰니 고친 장만 연다.
-- 영상: `npm.cmd run export -- --slides 1,3,6 --sec 10` (장 번호 · 장마다 초). `--gif` 로 GIF도, `--hd` 로 1920×1080.
+- 영상: `node scripts/export.mjs --slides '1,3,6' --sec 10` (장 번호 · 장마다 초). `--gif` 로 GIF도, `--hd` 로 1920×1080, 느린 PC는 `--light`.
+- `npm.cmd install` 뒤 나오는 `npm audit` 경고는 무시한다. `npm audit fix` 는 하지 않는다.
 
 ## 6. 명령 (스킬)
 

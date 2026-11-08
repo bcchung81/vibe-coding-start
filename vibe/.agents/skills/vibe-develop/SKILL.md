@@ -26,7 +26,8 @@ description: PLAN.md의 다음 단계 하나를 구현해 ego-browser로 눌러 
 5. 둘 다 통과하면 `PLAN.md` 의 그 단계를 `[x]` 로 바꾸고, 확인한 방법을 한 줄 적는다. 통과하지 못한 기준이 있으면 `[x]` 로 바꾸지 않고, 그 기준만 고친 뒤 4를 다시 한다 (같은 기준으로 두 번 실패하면 멈추고 B로 간다).
 6. 사용자에게 "내 브라우저를 새로고침해 한 번 더 보세요"라고 말한다 — 마지막 확인은 사람 눈이다.
 7. 1단계(연결)일 때:
-   - 키는 `.env.local` 의 `DATA_GO_KR_KEY` (Decoding 키)만 쓴다. 값을 묻거나 출력하지 않는다. 없으면 `시작하기.md` 3번대로 사용자가 직접 넣게 안내하고 기다린다.
+   - 키는 `.env.local` 의 `DATA_GO_KR_KEY` (Decoding 키)만 쓴다. 값을 묻거나 출력하지 않고, `.env.local` 을 열거나 고치지 않는다. 있는지는 `Select-String -Path .env.local -Pattern '^\s*DATA_GO_KR_KEY\s*=\s*\S' -Quiet` (True/False)로만 본다.
+   - 키가 없거나 승인 전이어도 기다리지 않는다. 예시 데이터로 돌려주는 길까지 만들고, 그 화면("예시 데이터" 표시)으로 완료 기준을 본다. 키는 `시작하기.md` 3번대로 나중에 넣으면 된다고 말한다.
    - 요청 주소 · 파라미터 · 응답 항목은 주제 카드의 표를 따른다. 파라미터는 `URLSearchParams` 로 조립한다.
    - 성공하면 `live: true`, 키가 없거나 호출이 실패하면 `data/snapshot.json` 을 `live: false` 로 대신 돌려주고 화면에 "예시 데이터"라고 표시한다. 오류 원문은 화면에 보내지 않는다.
 8. 모든 단계가 `[x]` 이면 "다음: `vibe-design 스킬로 화면 다듬어줘`, 또는 `vibe-develop 스킬로 배포 전 점검해줘`"을 말한다.
@@ -55,7 +56,7 @@ description: PLAN.md의 다음 단계 하나를 구현해 ego-browser로 눌러 
 
 | 점검 | 확인 방법 | 통과 |
 |---|---|---|
-| 1. 키가 git에 없나 | `git check-ignore .env.local` 이 `.env.local` 을 출력한다 · `git ls-files` 에 `.env` 로 시작하는 파일이 없다(`.env.example` 만 예외) · 코드에 키처럼 긴 문자열이 없다 | 셋 다 |
+| 1. 키가 git에 없나 | `git check-ignore .env.local` 이 `.env.local` 을 출력한다 · `git ls-files` 에 `.env` 로 시작하는 파일이 없다(`.env.example` 만 예외) · 코드에 키처럼 긴 문자열이 없다(`.env*` · `node_modules` · `.next` 는 검색하지 않는다) | 셋 다 |
 | 2. 키 없이도 빌드되나 | 키를 빌드할 때가 아니라 요청이 올 때 서버 라우트 안에서 읽는지 코드를 본다 → `npm.cmd run build` | 빌드 통과 |
 | 3. 오류 원문이 화면에 안 보이나 | 서버 라우트의 실패 처리와 화면의 오류 표시를 본다. 응답에 오류 원문 · 키 · 요청 주소가 담기지 않는다 | 예시 데이터 · 사용자 문구만 |
 
@@ -69,14 +70,14 @@ description: PLAN.md의 다음 단계 하나를 구현해 ego-browser로 눌러 
 
 ## E. 배포 — 이름을 정해 한 번만
 
-배포 전 점검(C)을 통과하지 않았으면 C부터 한다. Vercel 명령은 모두 `node scripts/vercel.mjs …` 로 부른다 — `.env.local` 의 `VERCEL_TOKEN` 을 값 없이 넘겨 준다. 토큰 · 키 값을 읽어 말하거나 명령에 쓰지 않는다.
+배포 전 점검(C)을 통과하지 않았으면 C부터 한다. Vercel 명령은 모두 `node scripts/vercel.mjs …` 로 부른다 — `.env.local` 의 `VERCEL_TOKEN` 을 값 없이 넘겨 준다. 토큰 · 키 값을 읽어 말하거나 명령에 쓰지 않고, `.env.local` 을 열거나 고치지 않는다. 실행할 때 나오는 `DeprecationWarning`(DEP0190)은 오류가 아니니 무시한다.
 
-1. 토큰: `.env.local` 에 `VERCEL_TOKEN` 줄이 있는지만 본다. 없으면 사용자에게 안내하고 기다린다 — vercel.com 에 GitHub로 가입 · 로그인 → Account Settings → **Tokens** → 이름 `kca-교육` · 만료 1일로 만들고 → 메모장으로 `.env.local` 에 `VERCEL_TOKEN=토큰` 한 줄. 토큰 화면은 사람이 연다.
+1. 토큰: `Select-String -Path .env.local -Pattern '^\s*VERCEL_TOKEN\s*=\s*\S' -Quiet` 로 있는지만 본다(True/False). 없으면 사용자에게 안내하고 기다린다 — vercel.com 에 GitHub로 가입 · 로그인 → Account Settings → **Tokens** → 이름 `kca-교육` · 만료 1일로 만들고 → 메모장으로 `.env.local` 에 `VERCEL_TOKEN=토큰` 한 줄. 토큰 화면은 사람이 연다.
 2. 확인: `node scripts/vercel.mjs whoami` 에 계정 이름이 나오면 된다. "not valid" 면 토큰을 다시 만들어 넣게 한다.
 3. 이름: 사용자가 준 이름을 쓴다. 없으면 `kca<주제 번호>-<영문 이름>` (예: `kca02-hong`)으로 묻는다. 소문자 · 숫자 · `-` 만 쓴다.
 4. 연결: `node scripts/vercel.mjs project create <이름>` (이미 있으면 넘어간다) → `node scripts/vercel.mjs link --yes --project <이름>`. 명령 이름이 다르다고 나오면 `node scripts/vercel.mjs project --help` 로 만드는 명령을 확인한다.
-5. 키 등록: `node scripts/vercel.mjs env-add DATA_GO_KR_KEY` — `.env.local` 의 값을 production 환경변수로 넣는다.
+5. 키 등록: `node scripts/vercel.mjs env-add DATA_GO_KR_KEY` — `.env.local` 의 값을 production 환경변수로 넣는다. `.env.local` 에 `DATA_GO_KR_KEY` 가 없으면(위 `Select-String` 이 False) 건너뛰고 "예시 데이터로 배포합니다. 키가 반영되면 키 등록과 배포를 한 번 더 하면 됩니다"라고 말한다.
 6. 배포는 한 번: `node scripts/vercel.mjs deploy --prod --yes`
-7. 확인: 출력의 공개 주소(`https://<이름>.vercel.app`)를 `ego-browser` 로 열어 PLAN 1 · 2단계 완료 기준을 "브라우저 점검"대로 보고, "예시 데이터" 표시 없이 실제 데이터가 보이는지 본다. 표로 보고하고 사용자에게 휴대폰으로도 열어 보라고 말한다.
-8. "예시 데이터"로 보이면: `node scripts/vercel.mjs env ls` 로 `DATA_GO_KR_KEY` 이름이 production에 있는지만 본다 → 키 등록 전에 배포했으면 6을 한 번 더 한다.
+7. 확인: 공개 주소는 배포 출력의 **Aliased** 줄 주소를 쓴다 — 이름이 겹치면 `https://<이름>.vercel.app` 이 아닌 주소가 붙는다. 그 주소를 `ego-browser` 로 열어 PLAN 1 · 2단계 완료 기준을 "브라우저 점검"대로 보고, "예시 데이터" 표시 없이 실제 데이터가 보이는지 본다(5에서 키를 건너뛰었으면 "예시 데이터" 표시가 정상). 표로 보고하고 사용자에게 휴대폰으로도 열어 보라고 말한다.
+8. 키를 등록했는데 "예시 데이터"로 보이면: `node scripts/vercel.mjs env ls` 로 `DATA_GO_KR_KEY` 이름이 production에 있는지만 본다 → 키 등록 전에 배포했으면 6을 한 번 더 한다.
 9. 끝으로 말한다: "교육이 끝나면 vercel.com → Tokens 에서 `kca-교육` 토큰을 지우세요."
